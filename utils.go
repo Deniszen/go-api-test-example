@@ -6,6 +6,7 @@ import (
 	"io"
 )
 
+// JSONEncodingReaderCloser encoding io.ReadCloser to model
 func JSONEncodingReaderCloser(closer io.ReadCloser, itf interface{}) {
 	var buf bytes.Buffer
 	_, _ = buf.ReadFrom(closer)
@@ -13,10 +14,12 @@ func JSONEncodingReaderCloser(closer io.ReadCloser, itf interface{}) {
 	_ = json.Unmarshal([]byte(jsonString), &itf)
 }
 
+// JSONEncodingByte encoding bytes to model
 func JSONEncodingByte(closer []byte, itf interface{}) {
 	_ = json.Unmarshal(closer, itf)
 }
 
+// JSONToReader JSON to bytes.Reader
 func JSONToReader(json string) *bytes.Reader {
 	data := []byte(json)
 	return bytes.NewReader(data)

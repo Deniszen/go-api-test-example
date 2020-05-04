@@ -3,50 +3,45 @@ package main
 import (
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
-func ExecuteGet(url string) (resp *http.Response, bodyBytes []byte) {
+func executeGet(url string) (*http.Response, []byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Println(err)
-		return
+		return nil, nil, err
 	}
 	defer resp.Body.Close()
-	bodyBytes, err = ioutil.ReadAll(resp.Body)
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return nil, nil, err
 	}
-	return
+	return resp, bodyBytes, nil
 }
 
-func ExecutePost(url string, contentType string, body io.Reader) (resp *http.Response, bodyBytes []byte) {
+func executePost(url string, contentType string, body io.Reader) (*http.Response, []byte, error) {
 	resp, err := http.Post(url, contentType, body)
 	if err != nil {
-		log.Println(err)
-		return
+		return nil, nil, err
 	}
 	defer resp.Body.Close()
-	bodyBytes, err = ioutil.ReadAll(resp.Body)
+	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return nil, nil, err
 	}
-	return
+	return resp, bodyBytes, nil
 }
 
-func ExecuteDelete(url string) (resp *http.Response) {
+func executeDelete(url string) (*http.Response, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
-		log.Println(err)
-		return
+		return nil, err
 	}
-	resp, err = client.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
-		log.Println(err)
-		return
+		return nil, err
 	}
 	defer resp.Body.Close()
-	return
+	return resp, nil
 }

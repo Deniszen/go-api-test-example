@@ -14,7 +14,7 @@ func JSONEncodingReaderCloser(closer io.ReadCloser, itf interface{}) {
 }
 
 func JSONEncodingByte(closer []byte, itf interface{}) {
-	_ = json.Unmarshal(closer, &itf)
+	_ = json.Unmarshal(closer, itf)
 }
 
 func JSONToReader(json string) *bytes.Reader {

@@ -1,5 +1,6 @@
 package main
 
+//
 type Animals struct {
 	Count   int
 	Animals []Animal

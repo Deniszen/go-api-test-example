@@ -1,16 +1,22 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"testing"
 )
 
 const contentType string = "application/json"
 const url string = "http://localhost:8080/"
 
-func TestCheckCreateAnimal(t *testing.T)  {
+func TestCheckCreateAnimal(t *testing.T) {
 	var animal Animal
 	r := JSONToReader(`{"id":1, "type":"zebra", "name":"dasha", "age":"17"}`)
-	resp, body := ExecutePost(url+ "/animals", contentType, r)
+	resp, body, err := executePost(fmt.Sprintf("%s%s", url, "/animals"), contentType, r)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if resp.StatusCode != 200 {
 		t.Errorf("expected '%d' but got '%d'", 200, resp.StatusCode)
@@ -22,7 +28,7 @@ func TestCheckCreateAnimal(t *testing.T)  {
 		t.Errorf("expected '%d' but got '%d'", 1, animal.ID)
 	}
 
-	resp, body = ExecuteGet(url + "animals/1")
+	resp, body, err = executeGet(fmt.Sprintf("%s%s", url, "animals/1"))
 	JSONEncodingByte(body, &animal)
 
 	if animal.ID != 1 {
@@ -30,10 +36,14 @@ func TestCheckCreateAnimal(t *testing.T)  {
 	}
 }
 
-func TestCheckAnimal(t *testing.T)  {
+func TestCheckAnimal(t *testing.T) {
 	var animal Animal
 
-	resp, body := ExecuteGet(url + "animals/1")
+	resp, body, err := executeGet(fmt.Sprintf("%s%s", url, "animals/1"))
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if resp.StatusCode != 200 {
 		t.Errorf("expected '%d' but got '%d'", 200, resp.StatusCode)
@@ -50,10 +60,14 @@ func TestCheckAnimal(t *testing.T)  {
 	}
 }
 
-func TestCheckAnimalsList(t *testing.T)  {
+func TestCheckAnimalsList(t *testing.T) {
 	var animals Animals
 
-	resp, body := ExecuteGet(url + "animals/list")
+	resp, body, err := executeGet(fmt.Sprintf("%s%s", url, "animals/list"))
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if resp.StatusCode != 200 {
 		t.Errorf("expected '%d' but got '%d'", 200, resp.StatusCode)
@@ -66,8 +80,11 @@ func TestCheckAnimalsList(t *testing.T)  {
 	}
 }
 
-func TestCheckDeleteAnimal(t *testing.T)  {
-	resp := ExecuteDelete(url + "animals/1")
+func TestCheckDeleteAnimal(t *testing.T) {
+	resp, err := executeDelete(fmt.Sprintf("%s%s", url, "animals/1"))
+	if err != nil {
+		log.Fatal(err)
+	}
 	if resp.StatusCode != 200 {
 		t.Errorf("expected '%d' but got '%d'", 200, resp.StatusCode)
 	}

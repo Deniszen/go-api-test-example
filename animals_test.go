@@ -15,7 +15,7 @@ func TestCheckCreateAnimal(t *testing.T) {
 	r := JSONToReader(`{"id":1, "type":"zebra", "name":"dasha", "age":"17"}`)
 	resp, body, err := executePost(fmt.Sprintf("%s%s", url, "/animals"), contentType, r)
 
-	if CheckSchema(SchemaUpload("../zooTest/schemas/animal.json"), DocumentUpload(body)) != true {
+	if CheckSchema(SchemaUpload("../go-api-test-example/schemas/animal.json"), DocumentUpload(body)) != true {
 		t.Errorf("expected true but got false")
 	}
 
@@ -36,7 +36,7 @@ func TestCheckCreateAnimal(t *testing.T) {
 	resp, body, err = executeGet(fmt.Sprintf("%s%s", url, "animals/1"))
 	JSONEncodingByte(body, &animal)
 
-	if CheckSchema(SchemaUpload("../zooTest/schemas/animal.json"), DocumentUpload(body)) != true {
+	if CheckSchema(SchemaUpload("../go-api-test-example/schemas/animal.json"), DocumentUpload(body)) != true {
 		t.Errorf("expected true but got false")
 	}
 
@@ -50,7 +50,7 @@ func TestCheckAnimal(t *testing.T) {
 
 	resp, body, err := executeGet(fmt.Sprintf("%s%s", url, "animals/1"))
 
-	if CheckSchema(SchemaUpload("../zooTest/schemas/animal.json"), DocumentUpload(body)) != true {
+	if CheckSchema(SchemaUpload("../go-api-test-example/schemas/animal.json"), DocumentUpload(body)) != true {
 		t.Errorf("expected true but got false")
 	}
 
@@ -78,7 +78,7 @@ func TestCheckAnimalsList(t *testing.T) {
 
 	resp, body, err := executeGet(fmt.Sprintf("%s%s", url, "animals/list"))
 
-	if CheckSchema(SchemaUpload("../zooTest/schemas/animals.json"), DocumentUpload(body)) != true {
+	if CheckSchema(SchemaUpload("../go-api-test-example/schemas/animals.json"), DocumentUpload(body)) != true {
 		t.Errorf("expected true but got false")
 	}
 
